@@ -5,6 +5,9 @@ from IngredientService import IngredientService
 from werkzeug.routing import BaseConverter
 import json
 import uuid
+import random
+import time
+
 
 app = Flask(__name__)
 api = Api(app)
@@ -24,23 +27,25 @@ class uuidListConverter(BaseConverter):
 
 class Recipes(Resource):
 	def get(self,id):
+		if random.randint(1,10) == 1:
+			time.sleep(1)
+
+
+		value = recipes_service.getIngredientUUIDs(id)
+		return json.dumps(value)
+
+
+class Ingredients(Resource):
+	def get(self,ids):
+		if random.randint(1,10) == 1:
+			time.sleep(1)
 		try:
-			value = recipes_service.getIngredientUUIDs(id)
+			value = ingredients_service.getIngredientUUIDs(ids)
 			return json.dumps(value)
 		except ValueError:
 			abort(400)
 		except:
 			abort(500)
-
-class Ingredients(Resource):
-	def get(self,ids):
-		#try:
-		value = ingredients_service.getIngredientUUIDs(ids)
-		return json.dumps(value)
-		#except ValueError:
-			#abort(400)
-		#except:
-		#	abort(500)
 
 app.url_map.converters['uuid_list'] = uuidListConverter
 
