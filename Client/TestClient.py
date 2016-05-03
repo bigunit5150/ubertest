@@ -26,7 +26,7 @@ class RecipeProxy:
 		#response = requests.get(url)
 
 		ingredients = json.loads(response.json())
-		if len(ingredients) > 0:
+		if ingredients != None and len(ingredients) > 0:
 			needPrefix = False
 			url = "{0}ingredients/".format(ingredient_base_url)
 			for i in ingredients:
@@ -46,6 +46,11 @@ class RecipeProxy:
 
 if __name__ == '__main__':
 	proxy = RecipeProxy()
-	response = proxy.getrecipe(uuid.UUID('00000000-0000-0000-0000-000000000002'))
-	for i in response:
-		print i, response[i]
+	uid = raw_input("Enter your recipe id: ")
+	#'00000000-0000-0000-0000-000000000002'
+	response = proxy.getrecipe(uuid.UUID(uid))
+	if response == None:
+		print "Nothing found for that id"
+	else:
+		for i in response:
+			print i, response[i]
